@@ -110,6 +110,12 @@ def test_wildrf(model, opt):
 
     print(f"📁 Data root: {dataroot}")
 
+    # 缓存命令行传入的失真参数 #修改
+    original_blur_prob = opt.blur_prob  # 修改
+    original_jpg_prob = opt.jpg_prob  # 修改
+    original_blur_sig = opt.blur_sig  # 修改
+    original_jpg_qual = opt.jpg_qual  # 修改
+
     platforms = ['reddit', 'facebook', 'twitter']
     results = {}
     accs, aps, aucs = [], [], []
@@ -128,7 +134,15 @@ def test_wildrf(model, opt):
         opt.classes = ['']
         opt.no_resize = False
         opt.no_crop = True
-        opt.is_aug = False
+        # 修改：测试数据增强
+        opt.is_aug = True
+
+        # 强制恢复 Shell 脚本传入的失真参数，防止被循环重置 #修改
+        opt.blur_prob = original_blur_prob  # 修改
+        opt.jpg_prob = original_jpg_prob  # 修改
+        opt.blur_sig = original_blur_sig  # 修改
+        opt.jpg_qual = original_jpg_qual  # 修改
+
 
         try:
             acc, ap, r_acc, f_acc, auc, precision, recall = validate(model, opt)

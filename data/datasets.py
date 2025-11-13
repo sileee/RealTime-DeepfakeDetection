@@ -50,6 +50,7 @@ def binary_dataset(opt, root):
             rz_func,
             crop_func,
             flip_func,
+            aug_func,  # <--- 在这里添加 aug_func
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]), is_valid_file=is_valid_file_func)

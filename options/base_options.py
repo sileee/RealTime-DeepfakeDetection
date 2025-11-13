@@ -17,11 +17,17 @@ class BaseOptions():
 
         # data augmentation
         parser.add_argument('--rz_interp', default='bilinear')
-        parser.add_argument('--blur_prob', type=float, default=0)
-        parser.add_argument('--blur_sig', default='0.5')
-        parser.add_argument('--jpg_prob', type=float, default=0)
-        parser.add_argument('--jpg_method', default='cv2')
-        parser.add_argument('--jpg_qual', default='75')
+        #检测是不是数据不增强导致的过拟合
+        # parser.add_argument('--blur_prob', type=float, default=0)
+        # parser.add_argument('--blur_sig', default='0.5')
+        # parser.add_argument('--jpg_prob', type=float, default=0)
+        # parser.add_argument('--jpg_method', default='cv2')
+        # parser.add_argument('--jpg_qual', default='75')
+        parser.add_argument('--blur_prob', type=float, default=0.1)  # 改为 10% 概率
+        parser.add_argument('--blur_sig', default='0.0,3.0')  # 改为 0.0 到 3.0 之间的随机值
+        parser.add_argument('--jpg_prob', type=float, default=0.1)  # 改为 10% 概率
+        parser.add_argument('--jpg_method', default='cv2,pil')  # 随机使用 cv2 或 pil
+        parser.add_argument('--jpg_qual', default='50,100')  # 随机使用 50 到 100 之间的压缩质量
 
         parser.add_argument('--dataroot', default='./dataset/', help='path to images (should have subfolders trainA, trainB, valA, valB, etc)')
         parser.add_argument('--classes', default='', help='image classes to train on')
@@ -96,14 +102,22 @@ class BaseOptions():
             opt.name = opt.name + suffix
 
         # Conditional settings based on --model
-        if opt.model in ['LaDeDa', 'ladeda']:
+        # if opt.model in ['LaDeDa', 'ladeda']:
+        #     opt.features_dim = 2048
+        #     opt.preprocess = opt.ladeda_preprocess
+        # elif opt.model in ['Tiny', 'tiny']:
+        #     opt.features_dim = 8
+        #     opt.preprocess = opt.tiny_preprocess
+        # else:
+        #     raise ValueError("Model type should be LaDeDa\ladeda or tiny\Tiny")
+        if opt.model in ['LaDeDa', 'ladeda', 'SoftAttention', 'softattention']:
             opt.features_dim = 2048
             opt.preprocess = opt.ladeda_preprocess
         elif opt.model in ['Tiny', 'tiny']:
             opt.features_dim = 8
             opt.preprocess = opt.tiny_preprocess
         else:
-            raise ValueError("Model type should be LaDeDa\ladeda or tiny\Tiny")
+            raise ValueError("Model type should be LaDeDa\\ladeda or tiny\\Tiny or SoftAttention")
 
 
 

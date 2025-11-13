@@ -5,8 +5,15 @@ class TrainOptions(BaseOptions):
     def initialize(self, parser):
         parser = BaseOptions.initialize(self, parser)
         parser.add_argument('--earlystop_epoch', type=int, default=15)
+
         parser.add_argument('--data_aug', action='store_true', help='if specified, perform additional data augmentation (photometric, blurring, jpegging)')
-        parser.add_argument('--optim', type=str, default='adam', help='optim to use [sgd, adam]')
+        # parser.add_argument('--optim', type=str, default='adam', help='optim to use [sgd, adam]')
+        parser.add_argument('--optim', type=str, default='adam_cosine',
+                            help='optim to use [sgd, adam, adam_cosine]')  # 默认改为 adam_cosine
+        parser.add_argument('--is_aug', type=bool, default=True)  # 改为默认 True
+        parser.add_argument('--max_lr', type=float, default=0.0001, help='max learning rate for adam_cosine')
+        parser.add_argument('--min_lr', type=float, default=1e-6, help='min learning rate for adam_cosine')
+
         parser.add_argument('--new_optim', action='store_true', help='new optimizer instead of loading the optim state')
         parser.add_argument('--loss_freq', type=int, default=400, help='frequency of showing loss on tensorboard')
         parser.add_argument('--save_latest_freq', type=int, default=2000, help='frequency of saving the latest results')
@@ -21,7 +28,9 @@ class TrainOptions(BaseOptions):
         parser.add_argument('--niter', type=int, default=1000, help='# of iter at starting learning rate')
         parser.add_argument('--beta1', type=float, default=0.9, help='momentum term of adam')
         parser.add_argument('--lr', type=float, default=0.0001, help='initial learning rate for adam')
-        parser.add_argument('--is_aug', action='store_true')
+        # parser.add_argument('--is_aug', action='store_true')
+
+
         # parser.add_argument('--model_path')
         # parser.add_argument('--no_resize', action='store_true')
         # parser.add_argument('--no_crop', action='store_true')
